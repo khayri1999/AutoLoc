@@ -38,4 +38,10 @@ public class ClientController {
     public Client modifyClient(@RequestBody Client client) {
         return serviceClient.modifyClient(client);
     }
+
+    @PutMapping("/affecter-vehicule/{client-id}/{vehicule-id}")
+    public Client affecterVehicule(@PathVariable("client-id") Long idClient,
+                                   @PathVariable("vehicule-id") Long idVehicule) {
+        return serviceClient.affecterVehicule(idClient, idVehicule);
+    }
 }

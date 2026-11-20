@@ -6,11 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "vehicule")
@@ -61,4 +61,8 @@ public class Vehicule {
     @JsonIgnore
     @OneToMany(mappedBy = "vehicule")
     private List<Reservation> reservations = new ArrayList<>();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "vehicules")
+    private List<Client> clients = new ArrayList<>();
 }

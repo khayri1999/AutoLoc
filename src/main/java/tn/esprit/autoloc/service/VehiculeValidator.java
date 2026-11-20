@@ -9,9 +9,27 @@ import java.math.BigDecimal;
 public class VehiculeValidator {
 
     public void valider(Vehicule vehicule) {
-        BigDecimal tarif = vehicule.getTarifJournalier();
-        if (tarif == null || tarif.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Le tarif doit être positif");
+        if (vehicule == null) {
+            throw new IllegalArgumentException("Le véhicule est obligatoire");
+        }
+        if (vehicule.getImmatriculation() == null || vehicule.getImmatriculation().isBlank()) {
+            throw new IllegalArgumentException("L'immatriculation est obligatoire");
+        }
+        if (vehicule.getMarque() == null || vehicule.getMarque().isBlank()) {
+            throw new IllegalArgumentException("La marque est obligatoire");
+        }
+        if (vehicule.getModele() == null || vehicule.getModele().isBlank()) {
+            throw new IllegalArgumentException("Le modèle est obligatoire");
+        }
+        if (vehicule.getCategorie() == null) {
+            throw new IllegalArgumentException("La catégorie est obligatoire");
+        }
+        if (vehicule.getStatut() == null) {
+            throw new IllegalArgumentException("Le statut est obligatoire");
+        }
+        if (vehicule.getTarifJournalier() == null
+                || vehicule.getTarifJournalier().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Le tarif journalier doit être positif");
         }
     }
 }

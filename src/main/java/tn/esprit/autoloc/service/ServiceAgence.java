@@ -1,31 +1,37 @@
 package tn.esprit.autoloc.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.autoloc.domain.Agence;
+import tn.esprit.autoloc.mapper.AgenceMapper;
 import tn.esprit.autoloc.repository.AgenceRepository;
+import tn.esprit.autoloc.web.dto.AgenceDTO;
+import tn.esprit.autoloc.web.dto.AgenceRequestDTO;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ServiceAgence implements IServiceAgence {
 
-    AgenceRepository agenceRepository;
+    private final AgenceRepository agenceRepository;
+    private final AgenceMapper agenceMapper;
 
     @Override
-    public List<Agence> retrieveAllAgences() {
-        return agenceRepository.findAll();
+    public List<AgenceDTO> retrieveAllAgences() {
+        return agenceMapper.toDtoList(agenceRepository.findAll());
     }
 
     @Override
-    public Agence retrieveAgence(Long idAgence) {
-        return agenceRepository.findById(idAgence).orElse(null);
+    public AgenceDTO retrieveAgence(Long idAgence) {
+        return agenceMapper.toDto(findAgence(idAgence));
     }
 
     @Override
-    public Agence addAgence(Agence agence) {
-        return agenceRepository.save(agence);
+    public AgenceDTO addAgence(AgenceRequestDTO dto) {
+        Agence agence = agenceMapper.toEntity(dto);
+        return agenceMapper.toDto(agenceRepository.save(agence));
     }
 
     @Override
@@ -34,7 +40,15 @@ public class ServiceAgence implements IServiceAgence {
     }
 
     @Override
-    public Agence modifyAgence(Agence agence) {
-        return agenceRepository.save(agence);
+    @Transactional
+    public AgenceDTO modifyAgence(Long idAgence, AgenceRequestDTO dto) {
+        Agence agence = findAgence(idAgence);
+        agenceMapper.updateEntity(dto, agence);
+        return agenceMapper.toDto(agenceRepository.save(agence));
+    }
+
+    private Agence findAgence(Long idAgence) {
+        return agenceRepository.findById(idAgence)
+                .orElseThrow(() -> new RuntimeException("Agence introuvable : " + idAgence));
     }
 }
